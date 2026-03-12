@@ -780,7 +780,7 @@
     <h1><span data-scramble>Design in</span><br><span class="accent" data-scramble>ASCII</span><span data-scramble>, Ship faster</span></h1>
     <p class="hero-sub">Describe your UI in words. Get an instant ASCII wireframe. Iterate, export, and hand off to your coding agent &mdash; all inside the terminal.</p>
     <div class="hero-actions">
-      <a href="#install" class="btn-primary">npx bytedesign install</a>
+      <a href="#install" class="btn-primary">Install ByteDesign</a>
       <a href="#how" class="btn-ghost">See how it works &darr;</a>
     </div>
   </section>
@@ -914,8 +914,8 @@
         <div class="step-marker">01</div>
         <div class="step-body">
           <h3>Install the command</h3>
-          <p>One command. Copies a single markdown file to your Claude Code config.</p>
-          <div class="step-cmd"><span class="green">$</span> npx bytedesign install</div>
+          <p>One command. Downloads a single markdown file to your Claude Code config.</p>
+          <div class="step-cmd" style="font-size:11px;"><span class="green">$</span> mkdir -p ~/.claude/commands &amp;&amp; curl -fsSL https://raw.githubusercontent.com/TsukimiTei/ByteDesign/main/command/bytedesign.md -o ~/.claude/commands/bytedesign.md</div>
         </div>
       </div>
       <div class="step-row">
@@ -945,12 +945,12 @@
         <h2>Start designing now</h2>
         <p class="sub">One install. Zero dependencies. Infinite wireframes.</p>
         <div class="cmd-box" onclick="copyCmd(this)">
-          <code><span style="color:var(--accent)">$</span> npx bytedesign install</code>
+          <code><span style="color:var(--accent)">$</span> mkdir -p ~/.claude/commands &amp;&amp; curl -fsSL https://raw.githubusercontent.com/TsukimiTei/ByteDesign/main/command/bytedesign.md -o ~/.claude/commands/bytedesign.md</code>
           <span class="copy-label">copy</span>
         </div>
-        <p class="install-or">&mdash; or install globally &mdash;</p>
+        <p class="install-or">&mdash; or clone &amp; install &mdash;</p>
         <div class="cmd-box" onclick="copyCmd(this)">
-          <code><span style="color:var(--accent)">$</span> npm i -g bytedesign &amp;&amp; bytedesign install</code>
+          <code><span style="color:var(--accent)">$</span> git clone https://github.com/TsukimiTei/ByteDesign.git &amp;&amp; cd ByteDesign &amp;&amp; node bin/cli.js install</code>
           <span class="copy-label">copy</span>
         </div>
       </div>
