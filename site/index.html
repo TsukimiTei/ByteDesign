@@ -670,6 +670,7 @@
       cursor: pointer;
       transition: all 0.25s;
       gap: 12px;
+      overflow-x: auto;
     }
 
     .cmd-box:hover {
@@ -678,8 +679,10 @@
     }
 
     .cmd-box code {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text);
+      white-space: nowrap;
+      text-align: left;
     }
 
     .cmd-box .copy-label {
@@ -687,6 +690,7 @@
       color: var(--text-muted);
       white-space: nowrap;
       transition: color 0.2s;
+      flex-shrink: 0;
     }
 
     .cmd-box:hover .copy-label { color: var(--accent); }
@@ -915,7 +919,7 @@
         <div class="step-body">
           <h3>Install the command</h3>
           <p>One command. Downloads a single markdown file to your Claude Code config.</p>
-          <div class="step-cmd" style="font-size:11px;"><span class="green">$</span> mkdir -p ~/.claude/commands &amp;&amp; curl -fsSL https://raw.githubusercontent.com/TsukimiTei/ByteDesign/main/command/bytedesign.md -o ~/.claude/commands/bytedesign.md</div>
+          <div class="step-cmd"><span class="green">$</span> curl -fsSL .../install.sh | bash</div>
         </div>
       </div>
       <div class="step-row">
@@ -945,12 +949,12 @@
         <h2>Start designing now</h2>
         <p class="sub">One install. Zero dependencies. Infinite wireframes.</p>
         <div class="cmd-box" onclick="copyCmd(this)">
-          <code><span style="color:var(--accent)">$</span> mkdir -p ~/.claude/commands &amp;&amp; curl -fsSL https://raw.githubusercontent.com/TsukimiTei/ByteDesign/main/command/bytedesign.md -o ~/.claude/commands/bytedesign.md</code>
+          <code><span style="color:var(--accent)">$</span> curl -fsSL https://raw.githubusercontent.com/TsukimiTei/ByteDesign/main/install.sh | bash</code>
           <span class="copy-label">copy</span>
         </div>
         <p class="install-or">&mdash; or clone &amp; install &mdash;</p>
         <div class="cmd-box" onclick="copyCmd(this)">
-          <code><span style="color:var(--accent)">$</span> git clone https://github.com/TsukimiTei/ByteDesign.git &amp;&amp; cd ByteDesign &amp;&amp; node bin/cli.js install</code>
+          <code><span style="color:var(--accent)">$</span> git clone https://github.com/TsukimiTei/ByteDesign.git &amp;&amp; cd ByteDesign &amp;&amp; bash install.sh</code>
           <span class="copy-label">copy</span>
         </div>
       </div>
