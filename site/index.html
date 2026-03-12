@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ByteDesign — AI ASCII Wireframe Designer for Claude Code</title>
+  <meta name="description" content="Design UX layouts with natural language. ByteDesign turns your ideas into ASCII wireframes instantly inside Claude Code.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0b;
+      --bg-elevated: #131316;
+      --bg-card: #1a1a1f;
+      --border: #2a2a30;
+      --text: #e8e8ed;
+      --text-dim: #8888a0;
+      --accent: #6ee7b7;
+      --accent-dim: #34d399;
+      --accent-glow: rgba(110, 231, 183, 0.15);
+      --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 32px;
+      background: rgba(10, 10, 11, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent) !important;
+      color: var(--bg) !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px !important;
+      transition: opacity 0.2s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      border: 1px solid rgba(110, 231, 183, 0.3);
+      background: rgba(110, 231, 183, 0.08);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      max-width: 800px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 .accent { color: var(--accent); }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 540px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+    }
+
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--text-dim); background: var(--bg-elevated); }
+
+    /* ─── TERMINAL DEMO ─── */
+    .terminal-section {
+      padding: 40px 24px 100px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .terminal {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 780px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+    }
+
+    .terminal-body {
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .terminal-body .prompt { color: var(--accent); }
+    .terminal-body .command { color: var(--text); }
+    .terminal-body .dim { color: var(--text-dim); }
+    .terminal-body .highlight { color: #fbbf24; }
+
+    .terminal-body pre {
+      margin: 0;
+      white-space: pre;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      color: var(--text-dim);
+    }
+
+    /* ─── FEATURES ─── */
+    .features {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 60px;
+      max-width: 500px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+
+    .feature-card:hover { border-color: rgba(110, 231, 183, 0.3); }
+
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-dim);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-it-works {
+      padding: 100px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 48px; }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(110, 231, 183, 0.1);
+      border: 1px solid rgba(110, 231, 183, 0.2);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+
+    .step-code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      color: var(--text-dim);
+    }
+
+    .step-code .accent { color: var(--accent); }
+
+    /* ─── INSTALL ─── */
+    .install {
+      padding: 100px 24px;
+      text-align: center;
+    }
+
+    .install-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 60px 40px;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .install-box h2 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .install-box p {
+      color: var(--text-dim);
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+
+    .install-command {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 24px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .install-command:hover { border-color: var(--accent); }
+
+    .install-command code {
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .install-command .copy-hint {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+    }
+
+    .install-or {
+      color: var(--text-dim);
+      font-size: 13px;
+      margin: 16px 0;
+    }
+
+    .install-alt {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    footer p {
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      nav { padding: 12px 16px; }
+      .nav-links { gap: 16px; }
+      .hero { padding: 100px 16px 60px; }
+      .hero h1 { letter-spacing: -1px; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .terminal-body { font-size: 11px; padding: 16px; }
+      .step { flex-direction: column; }
+      .install-box { padding: 40px 20px; }
+      .install-command code { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">ByteDesign</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#install" class="nav-cta">Install</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-badge">Open Source &middot; Claude Code Command</span>
+    <h1>Design UX in<br><span class="accent">ASCII</span>, Ship Faster</h1>
+    <p>Describe your UI in natural language, get instant ASCII wireframes. No Figma, no code &mdash; just ideas rendered at the speed of thought.</p>
+    <div class="hero-actions">
+      <a href="#install" class="btn-primary">Get Started</a>
+      <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+    </div>
+  </section>
+
+  <!-- TERMINAL DEMO -->
+  <section class="terminal-section">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">Claude Code</span>
+        <span style="width: 36px"></span>
+      </div>
+      <div class="terminal-body">
+        <div>
+          <span class="prompt">&gt;</span> <span class="command">/bytedesign a login page with email, password and Google OAuth</span>
+        </div>
+        <br>
+<pre>
+<span class="dim">╔════════════════════════════════════════════════════════╗
+║                                                        ║
+║                    ┌──────────┐                         ║
+║                    │  ◆ Logo  │                         ║
+║                    └──────────┘                         ║
+║                                                        ║
+║                  Welcome back                          ║
+║             Sign in to your account                    ║
+║                                                        ║
+║           ┌──────────────────────────┐                 ║
+║           │                          │                 ║
+║           │  Email                   │                 ║
+║           │  </span><span class="highlight">[________________________]</span><span class="dim">│                 ║
+║           │                          │                 ║
+║           │  Password                │                 ║
+║           │  </span><span class="highlight">[________________________]</span><span class="dim">│                 ║
+║           │                          │                 ║
+║           │  </span><span class="highlight">[      Sign In         ]</span><span class="dim"> │                 ║
+║           │                          │                 ║
+║           │  ─── or continue with ── │                 ║
+║           │                          │                 ║
+║           │  </span><span class="highlight">[ G  Sign in with Google ]</span><span class="dim">│                 ║
+║           │                          │                 ║
+║           └──────────────────────────┘                 ║
+║                                                        ║
+╚════════════════════════════════════════════════════════╝</span>
+</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Wireframing at the speed of typing</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">&#9889;</span>
+        <h3>Instant Generation</h3>
+        <p>Describe any UI component, page, or multi-screen flow in plain language. Get a complete ASCII wireframe in seconds.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">&#128488;</span>
+        <h3>Natural Language Iteration</h3>
+        <p>"Move the sidebar to the right." "Add a search bar to the header." Iterate on designs the way you think &mdash; in words.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">&#128241;</span>
+        <h3>Web &amp; Mobile</h3>
+        <p>Design for any platform. Desktop dashboards, mobile apps, tablet layouts &mdash; just tell ByteDesign what you're building.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">&#128230;</span>
+        <h3>Export to JSON</h3>
+        <p>Turn your wireframe into a structured JSON layout description that coding agents can directly consume to build the real thing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">&#128736;</span>
+        <h3>Built for Claude Code</h3>
+        <p>Runs as a native slash command. No extra apps, no context switching. Design and code in the same terminal session.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">&#127922;</span>
+        <h3>Zero Dependencies</h3>
+        <p>A single markdown file. No runtime, no API keys, no config. Install once, use forever.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how-it-works">
+    <p class="section-label">How It Works</p>
+    <h2 class="section-title">Three steps. That's it.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Install</h3>
+          <p>One command adds ByteDesign to your Claude Code environment.</p>
+          <div class="step-code">
+            <span class="accent">$</span> npx bytedesign install
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Describe</h3>
+          <p>Type <code>/bytedesign</code> followed by what you want to design, in any language.</p>
+          <div class="step-code">
+            <span class="accent">&gt;</span> /bytedesign an analytics dashboard with sidebar, KPI cards, and a data table
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Iterate &amp; Ship</h3>
+          <p>Refine the wireframe with follow-up instructions. When you're happy, export JSON and let your coding agent build it.</p>
+          <div class="step-code">
+            <span class="accent">&gt;</span> Move the nav to the left, make the cards 3 columns instead of 2
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install" id="install">
+    <div class="install-box">
+      <h2>Ready to design?</h2>
+      <p>Install ByteDesign and start wireframing in seconds.</p>
+      <div class="install-command" onclick="copyInstall(this)">
+        <code>npx bytedesign install</code>
+        <span class="copy-hint">click to copy</span>
+      </div>
+      <p class="install-or">or install globally</p>
+      <div class="install-command" onclick="copyInstall(this)">
+        <code>npm i -g bytedesign && bytedesign install</code>
+        <span class="copy-hint">click to copy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>ByteDesign &mdash; Open source ASCII wireframe designer. Built for <a href="https://claude.ai/claude-code" target="_blank">Claude Code</a>.</p>
+  </footer>
+
+  <script>
+    function copyInstall(el) {
+      const code = el.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const hint = el.querySelector('.copy-hint');
+        hint.textContent = 'copied!';
+        setTimeout(() => { hint.textContent = 'click to copy'; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>

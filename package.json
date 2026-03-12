@@ -1,0 +1,32 @@
+{
+  "name": "bytedesign",
+  "version": "0.1.0",
+  "description": "AI-powered ASCII wireframe generator for Claude Code. Design UX layouts with natural language.",
+  "bin": {
+    "bytedesign": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "command/"
+  ],
+  "keywords": [
+    "ascii",
+    "wireframe",
+    "ux",
+    "design",
+    "cli",
+    "claude-code",
+    "ai",
+    "prototyping"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "homepage": "",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
